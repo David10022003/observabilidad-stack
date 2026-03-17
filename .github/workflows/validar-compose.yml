@@ -1,0 +1,63 @@
+name: Validar Stack de Observabilidad
+
+on:
+  push:  
+    branches: [ main, feature/* ]
+  pull_request:
+    branches: [ main ]
+
+jobs: 
+  validar: 
+    runs-on: ubuntu-lastest
+
+  steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+
+    - name: Instalar Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install docker-compose -y
+
+    - name: Validar docker-compose.yml
+      run: docker-compose config
+
+    - name: Validar prometheus.yml
+      run: |
+        docker run -rm \
+          -v ${{ github.workspace }}/prometheus.yml:/etc/prometheus/prometheus.yml \
+          prom/prometheus \
+          --config.file=/etc/prometheus/prometheus.yml \
+          --check-config
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
